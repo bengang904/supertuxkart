@@ -1,7 +1,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <title>SuperTuxKart</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -26,12 +26,15 @@
         box-sizing: border-box;
       }
       p, label, select {
-        font-size: 12px;
-        margin: 4px;
+        font-size: 11px;
+        margin: 3px;
       }
       body {
         margin: 0px;
         overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
       }
       #canvas {
         background-color: #222222;
@@ -46,13 +49,14 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        width: 450px;
-        height: 290px;
-        margin-left: -220px;
-        margin-top: -145px;
+        width: 92vw;
+        max-width: 420px;
+        height: 85vh;
+        max-height: 280px;
+        transform: translate(-50%, -50%);
         z-index: 2;
         background-color: white;
-        padding: 12px;
+        padding: 10px;
         padding-top: 6px;
         border-radius: 8px;
         overflow-y: auto;
@@ -60,21 +64,28 @@
       #header_bar {
         display: flex;
         align-items: center;
-        gap: 18px;
+        gap: 12px;
+      }
+      #header_bar img {
+        width: 36px;
+        height: 36px;
+      }
+      #header_bar h1 {
+        font-size: 18px;
       }
       #status_bar {
         display: flex;
         align-items: center;
-        margin-top: 12px;
+        margin-top: 8px;
         gap: 6px;
+        flex-wrap: wrap;
       }
       #start_button {
         border: none;
         outline: none;
-        padding: 8px;
-        padding-left: 12px;
-        padding-right: 12px;
-        border-radius: 8px;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 12px;
       }
 
       #virtual_controls, #toggle_btn {
@@ -97,6 +108,7 @@
         pointer-events: none;
         touch-action: none;
         transition: opacity 0.2s ease;
+        overflow: hidden;
       }
       #virtual_controls.hidden {
         opacity: 0;
@@ -104,10 +116,10 @@
       }
       #joystick_base {
         position: absolute;
-        bottom: 40px;
-        left: 40px;
-        width: 130px;
-        height: 130px;
+        bottom: 18px;
+        left: 28px;
+        width: 110px;
+        height: 110px;
         background: rgba(255, 255, 255, 0.15);
         border: 2px solid rgba(255, 255, 255, 0.3);
         border-radius: 50%;
@@ -115,28 +127,29 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        touch-action: none;
       }
       #joystick_stick {
-        width: 55px;
-        height: 55px;
+        width: 48px;
+        height: 48px;
         background: rgba(255, 255, 255, 0.85);
         border-radius: 50%;
         box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         position: absolute;
-        transition: transform 0.05s linear;
+        will-change: transform;
       }
       #action_buttons {
         position: absolute;
-        bottom: 25px;
-        right: 25px;
-        width: 200px;
-        height: 200px;
+        bottom: 16px;
+        right: 24px;
+        width: 155px;
+        height: 155px;
         pointer-events: auto;
       }
       .action-btn {
         position: absolute;
-        width: 68px;
-        height: 68px;
+        width: 54px;
+        height: 54px;
         background: rgba(255, 255, 255, 0.22);
         border: 2px solid rgba(255, 255, 255, 0.45);
         border-radius: 50%;
@@ -146,7 +159,7 @@
         cursor: pointer;
         box-shadow: 0 4px 10px rgba(0,0,0,0.35);
         user-select: none;
-        font-size: 24px;
+        font-size: 18px;
         font-weight: bold;
         color: #ffffff;
         text-shadow: 0 1px 2px rgba(0,0,0,0.6);
@@ -156,25 +169,25 @@
         background: rgba(255, 255, 255, 0.55);
         transform: scale(0.92);
       }
-      #btn_fire {
-        bottom: 15px;
-        left: 10px;
+      #btn_drift {
+        top: 0px;
+        left: 48px;
       }
       #btn_backview {
-        bottom: 72px;
-        right: 72px;
+        top: 50px;
+        left: 0px;
       }
-      #btn_drift {
-        top: 15px;
-        right: 10px;
+      #btn_fire {
+        bottom: 0px;
+        right: 0px;
       }
       #toggle_btn {
         position: fixed;
-        top: 15px;
-        right: 15px;
+        top: 10px;
+        right: 10px;
         z-index: 100000;
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
         background: rgba(0, 0, 0, 0.4);
         border: 2px solid rgba(255, 255, 255, 0.4);
         border-radius: 8px;
@@ -185,8 +198,8 @@
         user-select: none;
       }
       #toggle_btn svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
         fill: #ffffff;
         transition: transform 0.2s ease;
       }
@@ -209,9 +222,9 @@
       </div>
 
       <div id="action_buttons">
-        <div id="btn_fire" class="action-btn"></div>
-        <div id="btn_backview" class="action-btn">B</div>
         <div id="btn_drift" class="action-btn">V</div>
+        <div id="btn_backview" class="action-btn">B</div>
+        <div id="btn_fire" class="action-btn"></div>
       </div>
     </div>
 
@@ -222,8 +235,6 @@
       </div>
       <p>This is an experimental port of SuperTuxKart to the browser using WebAssembly and Emscripten. Currently, everything works except for some rendering APIs and networking.</p>
       <p>There is a 120MB initial download required to play, and the game will require around 500MB of memory.</p>
-      <p>This web port was made by <a href="https://github.com/ading2210/">ading2210</a>, and the source code is located at <a href="https://github.com/ading2210/stk-code/tree/wasm">github.com/ading2210/stk-code</a>.</p>  
-      <p>If you want to check on the status of this port, take a look at the <a href="https://github.com/supertuxkart/stk-code/pull/5106/">corresponding pull request</a> in the SuperTuxKart repository.</p>
       <label for="quality_select">Texture quality:</label>
       <select name="quality_select" id="quality_select" style="margin: 0px;">
         <option value="low">Low (120MiB)</option>
@@ -277,9 +288,14 @@
         const stick = document.getElementById('joystick_stick');
         if (!base || !stick) return;
 
-        const maxDist = 38;
+        const maxDist = 32;
         let activePointerId = null;
         let currentKeys = { ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+        let centerX = 0;
+        let centerY = 0;
+        let rafId = null;
+        let lastClientX = 0;
+        let lastClientY = 0;
 
         const updateKeys = (newKeys) => {
           ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].forEach(k => {
@@ -296,13 +312,28 @@
           if (activePointerId !== null) return;
           activePointerId = e.pointerId;
           base.setPointerCapture(activePointerId);
-          handleMove(e);
-        });
+
+          const rect = base.getBoundingClientRect();
+          centerX = rect.left + rect.width / 2;
+          centerY = rect.top + rect.height / 2;
+
+          lastClientX = e.clientX;
+          lastClientY = e.clientY;
+          processMove();
+        }, { passive: false });
 
         base.addEventListener('pointermove', (e) => {
           if (e.pointerId !== activePointerId) return;
-          handleMove(e);
-        });
+          lastClientX = e.clientX;
+          lastClientY = e.clientY;
+
+          if (!rafId) {
+            rafId = requestAnimationFrame(() => {
+              processMove();
+              rafId = null;
+            });
+          }
+        }, { passive: true });
 
         const handleUp = (e) => {
           if (e.pointerId !== activePointerId) return;
@@ -312,13 +343,9 @@
         base.addEventListener('pointerup', handleUp);
         base.addEventListener('pointercancel', handleUp);
 
-        function handleMove(e) {
-          const rect = base.getBoundingClientRect();
-          const centerX = rect.left + rect.width / 2;
-          const centerY = rect.top + rect.height / 2;
-
-          let dx = e.clientX - centerX;
-          let dy = e.clientY - centerY;
+        function processMove() {
+          let dx = lastClientX - centerX;
+          let dy = lastClientY - centerY;
           const dist = Math.sqrt(dx * dx + dy * dy);
 
           if (dist > maxDist) {
@@ -328,7 +355,7 @@
 
           stick.style.transform = `translate(${dx}px, ${dy}px)`;
 
-          const threshold = 12;
+          const threshold = 10;
           const newKeys = {
             ArrowUp: dy < -threshold,
             ArrowDown: dy > threshold,
@@ -340,6 +367,10 @@
 
         function resetJoystick() {
           activePointerId = null;
+          if (rafId) {
+            cancelAnimationFrame(rafId);
+            rafId = null;
+          }
           stick.style.transform = 'translate(0px, 0px)';
           updateKeys({ ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false });
         }
