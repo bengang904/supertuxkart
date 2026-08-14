@@ -2,6 +2,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
+
     <title>SuperTuxKart</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <script src="coi-serviceworker.js"></script>
@@ -75,6 +76,17 @@
         padding-right: 12px;
         border-radius: 8px;
       }
+
+      #virtual_controls, #toggle_btn {
+        display: none;
+      }
+
+      @media (pointer: coarse), (max-width: 1024px) {
+        #virtual_controls, #toggle_btn {
+          display: flex;
+        }
+      }
+
       #virtual_controls {
         position: fixed;
         top: 0;
@@ -167,7 +179,6 @@
         border: 2px solid rgba(255, 255, 255, 0.4);
         border-radius: 8px;
         cursor: pointer;
-        display: flex;
         align-items: center;
         justify-content: center;
         box-shadow: 0 2px 6px rgba(0,0,0,0.3);
