@@ -121,9 +121,22 @@ async function download_chunks(url) {
   let current_chunk = 1;
 
   while (chunk = manifest.shift()) {
-    let mb_progress = Math.floor(offset / (1024 ** 2))
-    let mb_total = Math.floor(size / (1024 ** 2))
-    status_text.textContent = `Downloading ${filename}... (chunk ${current_chunk}/${chunk_count}, ${mb_progress}/${mb_total}MiB)`;
+    let progress_str = "";
+    let total_str = "";
+
+    if (offset < 1024 * 1024) {
+      progress_str = Math.floor(offset / 1024) + "KB";
+    } else {
+      progress_str = (offset / (1024 ** 2)).toFixed(1) + "MB";
+    }
+
+    if (size < 1024 * 1024) {
+      total_str = Math.floor(size / 1024) + "KB";
+    } else {
+      total_str = (size / (1024 ** 2)).toFixed(1) + "MB";
+    }
+
+    status_text.textContent = `Downloading ${filename}... (chunk ${current_chunk}/${chunk_count}, ${progress_str}/${total_str})`;
 
     let r2 = await fetch(base_url + "/" + chunk);
     let buffer = await r2.arrayBuffer();
